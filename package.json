@@ -27,5 +27,9 @@
     "ethereum-waffle": "^3.4.0",
     "ethers": "^5.5.2",
     "hardhat": "^2.7.0"
+  },
+  "prettier": {
+    "printWidth": 120,
+    "semi": true
   }
 }
