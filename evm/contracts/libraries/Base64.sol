@@ -24,7 +24,7 @@ library Base64 {
         // Add some extra buffer at the end
         bytes memory result = new bytes(encodedLen + 32);
 
-        bytes memory table = TABLE;
+        bytes memory table = TABLE; // memory keyword=>pass by value.
 
         assembly {
             let tablePtr := add(table, 1)

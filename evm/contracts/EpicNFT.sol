@@ -46,19 +46,31 @@ contract EpicNFT is ERC721URIStorage {
         string memory finalSvg = string(abi.encodePacked(baseSvg, first, second, third, "</text></svg>"));
 
         // Marshall JSON metadata in place and base64 encode it.
+        // string memory json = Base64.encode(
+        //     bytes(
+        //         string(
+        //             abi.encodePacked(
+        //                 '{"name": "',
+        //                 // We set the title of our NFT as the generated word.
+        //                 combinedWord,
+        //                 '", "description": "A highly acclaimed collection of Legal NFTs.", "image": "data:image/svg+xml;base64,',
+        //                 // We add data:image/svg+xml;base64 and then append our base64 encode our svg.
+        //                 Base64.encode(bytes(finalSvg)),
+        //                 '"}'
+        //             )
+        //         )
+        //     )
+        // );
+
         string memory json = Base64.encode(
-            bytes(
-                string(
-                    abi.encodePacked(
-                        '{"name": "',
-                        // We set the title of our NFT as the generated word.
-                        combinedWord,
-                        '", "description": "A highly acclaimed collection of Legal NFTs.", "image": "data:image/svg+xml;base64,',
-                        // We add data:image/svg+xml;base64 and then append our base64 encode our svg.
-                        Base64.encode(bytes(finalSvg)),
-                        '"}'
-                    )
-                )
+            abi.encodePacked(
+                '{"name": "',
+                // We set the title of our NFT as the generated word.
+                combinedWord,
+                '", "description": "A highly acclaimed collection of Legal NFTs.", "image": "data:image/svg+xml;base64,',
+                // We add data:image/svg+xml;base64 and then append our base64 encode our svg.
+                Base64.encode(bytes(finalSvg)),
+                '"}'
             )
         );
 
