@@ -2,11 +2,15 @@
 
 This is a fun project only.
 
+Run commands in the relevant directory, not in project root.
+
 # Stack
 
 Hardhat, Solidity, JavaScript, React
 
 # Compile smart contract and deploy to local Hardhat chain
+
+**Run the following commands from inside the `evm` directory.**
 
 Run `npx hardhat run scripts/<scriptname.js>` from the project root. Ensure its the local script.
 

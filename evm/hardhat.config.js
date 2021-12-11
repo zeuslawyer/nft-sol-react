@@ -1,4 +1,5 @@
 require("@nomiclabs/hardhat-waffle");
+const keys = require("./keys.js");
 
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
@@ -20,8 +21,8 @@ module.exports = {
   solidity: "0.8.0",
   networks: {
     rinkeby: {
-      url: `https://eth-rinkeby.alchemyapi.io/v2/${ALCHEMY_API_KEY}`,
-      accounts: [`${TEST_ACT_PRIVATE_KEY}`],
+      url: `https://eth-rinkeby.alchemyapi.io/v2/${keys.ALCHEMY_API_KEY}`,
+      accounts: [`${keys.TEST_ACCOUNT_PRIVATE_KEY}`],
     },
   },
 };
