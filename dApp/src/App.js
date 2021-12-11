@@ -1,5 +1,9 @@
 import "./styles/App.css";
 import twitterLogo from "./assets/twitter-logo.svg";
+
+import { ethers } from "ethers";
+import epicNFT from "./configs/EpicNFT.json";
+
 import React from "react";
 
 // Constants
@@ -49,6 +53,39 @@ const App = () => {
     }
   };
 
+  const mintNFT = async () => {
+    const CONTRACT_ADDRESS = "0xDedE63890bffBFf8DD674f25BAa3C2779753C423";
+    try {
+      const { ethereum } = window;
+      if (ethereum) {
+        // Providers talk to ethereum nodes via a consistent interface to
+        // standard Ethereum node functionality.
+        // In my case, the provider will be from MetaMask, using metamask's nodes.
+        const provider = new ethers.providers.Web3Provider(ethereum);
+
+        // A Signer in ethers is an abstraction of an Ethereum Account,
+        // which can be used to sign messages and transactions and send
+        // signed transactions to the Ethereum Network to execute state changing operations.
+        const signer = provider.getSigner();
+        const connectedContract = new ethers.Contract(
+          CONTRACT_ADDRESS,
+          epicNFT.abi,
+          signer
+        );
+
+        let nftTx = await connectedContract.makeEpicNFT();
+        await nftTx.wait();
+        console.log(
+          `Mined, see transaction: https://rinkeby.etherscan.io/tx/${nftTx.hash}`
+        );
+      } else {
+        console.error("ethereum object not found");
+      }
+    } catch (e) {
+      console.error("error in mintNFT :", e);
+    }
+  };
+
   const disconnectWallet = async () => {
     setCurrentUserAccount("");
   };
@@ -66,7 +103,9 @@ const App = () => {
   );
 
   const renderMintNFTButton = () => (
-    <button className="cta-button connect-wallet-button">MINT NFT</button>
+    <button className="cta-button connect-wallet-button" onClick={mintNFT}>
+      MINT NFT
+    </button>
   );
 
   const renderLogout = () => (
