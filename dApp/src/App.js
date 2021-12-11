@@ -9,8 +9,6 @@ import React from "react";
 // Constants
 const TWITTER_HANDLE = "zubinpratap";
 const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
-const OPENSEA_LINK = "https://testnets.opensea.io/assets";
-const TOTAL_MINT_COUNT = 50;
 const CONTRACT_ADDRESS = "0x8839FfaFbBE34A84EDe832db33A1BCC708afBa08";
 const RINKEBY_CHAIN_ID = "0x4";
 
@@ -52,7 +50,7 @@ const App = () => {
 
   React.useEffect(() => {
     checkWalletConnected();
-  }, []);
+  });
 
   const connectWallet = async () => {
     try {
