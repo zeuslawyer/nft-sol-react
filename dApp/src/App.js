@@ -2,18 +2,21 @@ import "./styles/App.css";
 import twitterLogo from "./assets/twitter-logo.svg";
 
 import { ethers } from "ethers";
-import epicNFT from "./configs/EpicNFT.json";
+import epicNFT from "./abi/EpicNFT.json";
 
 import React from "react";
 
 // Constants
 const TWITTER_HANDLE = "zubinpratap";
 const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
-const OPENSEA_LINK = "";
+const OPENSEA_LINK = "https://testnets.opensea.io/assets";
 const TOTAL_MINT_COUNT = 50;
+const CONTRACT_ADDRESS = "0xc58E4EBdC72c20bB956371187a47468c5bd799ff";
 
 const App = () => {
   const [currentUserAccount, setCurrentUserAccount] = React.useState("");
+  const [totalTokensMinted, setTotalTokensMinted] = React.useState(0);
+  const [maxTokenSupply, setMaxTokenSupply] = React.useState(50);
 
   const checkWalletConnected = async () => {
     const { ethereum } = window;
@@ -24,7 +27,9 @@ const App = () => {
     const accounts = await ethereum.request({ method: "eth_accounts" });
 
     if (accounts.length !== 0) {
+      // User has already connected wallet.
       setCurrentUserAccount(accounts[0]);
+      setupNFTMintedListener();
     } else {
       console.warn("No authorized account found");
     }
@@ -48,13 +53,48 @@ const App = () => {
       });
       console.log("Connected! Account is: ", accounts[0]);
       setCurrentUserAccount(accounts[0]);
+      setupNFTMintedListener();
     } catch (e) {
       console.error(e);
     }
   };
 
+  const setupNFTMintedListener = async () => {
+    try {
+      const { ethereum } = window;
+      if (ethereum) {
+        // Same stuff again
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const connectedContract = new ethers.Contract(
+          CONTRACT_ADDRESS,
+          epicNFT.abi,
+          signer
+        );
+
+        // Listen to event
+        connectedContract.on(
+          "NewEpicNFTMinted",
+          (sender, tokenId, maxTokens) => {
+            console.log(sender, tokenId.toNumber(), maxTokens.toNumber());
+            setTotalTokensMinted(tokenId.toNumber());
+            setMaxTokenSupply(maxTokens.toNumber());
+            alert(
+              `Hey there! Your NFT has been minted and linked it to your wallet address. It may be blank right now. It can take a max of 10 min to show up on OpenSea. Here's the link: ${OPENSEA_LINK}/${CONTRACT_ADDRESS}/${tokenId.toNumber()}`
+            );
+          }
+        );
+
+        console.log("event listener set up!");
+      } else {
+        console.log("Ethereum object doesn't exist!");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const mintNFT = async () => {
-    const CONTRACT_ADDRESS = "0xDedE63890bffBFf8DD674f25BAa3C2779753C423";
     try {
       const { ethereum } = window;
       if (ethereum) {
@@ -129,6 +169,13 @@ const App = () => {
             ? renderMintNFTButton()
             : renderNotConnectedContainer()}
           {currentUserAccount ? renderLogout() : null}
+        </div>
+        <div className="header-container">
+          <p className="sub-text">
+            {totalTokensMinted
+              ? `${totalTokensMinted} / ${maxTokenSupply} minted.`
+              : null}
+          </p>
         </div>
         <div className="footer-container">
           <img alt="Twitter Logo" className="twitter-logo" src={twitterLogo} />

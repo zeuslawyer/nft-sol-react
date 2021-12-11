@@ -8,6 +8,14 @@ Use the Metamask Wallet Browser Extension
 
 Use the Ethereum Rinkeby testnet.
 
+**ALWAYS REMEMBER...**
+Any time the contract is changed:
+
+- Redeploy.
+- Update contract address in App.js.
+- Update ABI file in the frontend's `./abi` folder.
+- update the contract address constant in `App.js`
+
 # Stack
 
 Hardhat, Solidity, JavaScript, React

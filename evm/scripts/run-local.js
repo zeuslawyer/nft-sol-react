@@ -1,4 +1,6 @@
 const hre = require("hardhat");
+const fs = require("fs");
+const path = require("path");
 
 const main = async () => {
   const contractFactory = await hre.ethers.getContractFactory("EpicNFT"); // Compiles contract

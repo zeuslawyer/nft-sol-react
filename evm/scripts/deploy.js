@@ -6,14 +6,14 @@ const main = async () => {
   await contract.deployed();
   console.log(`Contract deployed to : ${contract.address}`);
 
-  let tx = await contract.makeEpicNFT();
-  await tx.wait();
-  console.log("Minted NFT #1");
+  // let tx = await contract.makeEpicNFT();
+  // await tx.wait();
+  // console.log("Minted NFT #1");
 
-  txn = await contract.makeEpicNFT();
-  // Wait for it to be mined.
-  await txn.wait();
-  console.log("Minted NFT #2");
+  // txn = await contract.makeEpicNFT();
+  // // Wait for it to be mined.
+  // await txn.wait();
+  // console.log("Minted NFT #2");
 };
 
 const runMain = async () => {

@@ -16,10 +16,14 @@ contract EpicNFT is ERC721URIStorage {
 
     // Unique token ids.  Initilizes at 0.
     Counters.Counter private _tokenIds;
+    uint256 max_tokens = 50;
 
-    // Make a baseSvg variable here that all NFTs can use.
-    string baseSvg =
-        "<svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMin meet' viewBox='0 0 350 350'><style>.base { fill: white; font-family: serif; font-size: 24px; }</style><rect width='100%' height='100%' fill='black' /><text x='50%' y='50%' class='base' dominant-baseline='middle' text-anchor='middle'>";
+    // Split the SVG at the part where it asks for the background color.
+    string svgPartOne =
+        "<svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMin meet' viewBox='0 0 350 350'><style>.base { fill: white; font-family: serif; font-size: 24px; }</style><rect width='100%' height='100%' fill='";
+    string svgPartTwo = "'/><text x='50%' y='50%' class='base' dominant-baseline='middle' text-anchor='middle'>";
+
+    string[] colors = ["red", "#08C2A8", "black", "yellow", "blue", "green"];
 
     // I create three arrays, each with their own theme of random words.
     // Pick some random funny words, names of anime characters, foods you like, whatever!
@@ -27,7 +31,9 @@ contract EpicNFT is ERC721URIStorage {
     string[] secondWords = ["Tome", "Mutatis", "Mutandis", "Sui-Generis", "Ipso-Facto", "Ceteris-Paribus"];
     string[] thirdWords = ["Gavel", "Wig", "Robe", "Timesheet", "Briefs", "Docket"];
 
-    // Pass the name of our NFTs token and it's symbol.
+    event NewEpicNFTMinted(address sender, uint256 tokenId, uint256 maxTokens);
+
+    // Pass the name of our NFT token and it's symbol.
     constructor() ERC721("zpNFT", "z-nfty") {
         console.log("This is my NFT contract. Lordy!");
     }
@@ -36,6 +42,9 @@ contract EpicNFT is ERC721URIStorage {
         // Get the current tokenId. Starts at 0.
         uint256 newItemId = _tokenIds.current();
 
+        // Ensure no more than 50 tokens.
+        require(newItemId < 50);
+
         // Generate random words from lists
         string memory first = pickRandomFirstWord(newItemId);
         string memory second = pickRandomSecondWord(newItemId);
@@ -43,25 +52,10 @@ contract EpicNFT is ERC721URIStorage {
         string memory combinedWord = string(abi.encodePacked(first, second, third));
 
         // Concat svg string with <text> and <svg> tags.
-        string memory finalSvg = string(abi.encodePacked(baseSvg, first, second, third, "</text></svg>"));
+        string memory color = pickRandomColor(newItemId);
+        string memory finalSvg = string(abi.encodePacked(svgPartOne, color, svgPartTwo, combinedWord, "</text></svg>"));
 
         // Marshall JSON metadata in place and base64 encode it.
-        // string memory json = Base64.encode(
-        //     bytes(
-        //         string(
-        //             abi.encodePacked(
-        //                 '{"name": "',
-        //                 // We set the title of our NFT as the generated word.
-        //                 combinedWord,
-        //                 '", "description": "A highly acclaimed collection of Legal NFTs.", "image": "data:image/svg+xml;base64,',
-        //                 // We add data:image/svg+xml;base64 and then append our base64 encode our svg.
-        //                 Base64.encode(bytes(finalSvg)),
-        //                 '"}'
-        //             )
-        //         )
-        //     )
-        // );
-
         string memory json = Base64.encode(
             abi.encodePacked(
                 '{"name": "',
@@ -90,11 +84,13 @@ contract EpicNFT is ERC721URIStorage {
         // Increment token counter.
         _tokenIds.increment();
         console.log(
-            "The Token's name is '%s' and its symbol is '%s'. Its URI data is %s",
+            "The Token's name is '%s' and its symbol is '%s'. Its URI data is %s. Total Supply is %s",
             name(),
             symbol(),
             tokenURI(newItemId)
         );
+
+        emit NewEpicNFTMinted(msg.sender, newItemId, max_tokens);
     }
 
     // Helpers
@@ -115,6 +111,12 @@ contract EpicNFT is ERC721URIStorage {
         uint256 rand = random(string(abi.encodePacked("THIRD_WORD", Strings.toString(tokenId))));
         rand = rand % thirdWords.length;
         return thirdWords[rand];
+    }
+
+    function pickRandomColor(uint256 tokenId) public view returns (string memory) {
+        uint256 rand = random(string(abi.encodePacked("RANDOM COLOR", Strings.toString(tokenId))));
+        rand = rand % colors.length;
+        return colors[rand];
     }
 
     function random(string memory input) internal pure returns (uint256) {
