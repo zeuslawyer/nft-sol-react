@@ -12,16 +12,31 @@ const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
 const OPENSEA_LINK = "https://testnets.opensea.io/assets";
 const TOTAL_MINT_COUNT = 50;
 const CONTRACT_ADDRESS = "0xc58E4EBdC72c20bB956371187a47468c5bd799ff";
+const RINKEBY_CHAIN_ID = "0x4";
 
 const App = () => {
   const [currentUserAccount, setCurrentUserAccount] = React.useState("");
   const [totalTokensMinted, setTotalTokensMinted] = React.useState(0);
   const [maxTokenSupply, setMaxTokenSupply] = React.useState(50);
 
+  const confirmNetwork = async (ethereum, chainId) => {
+    let returnedChainId = await ethereum.request({ method: "eth_chainId" });
+    console.log("Connected to chain " + chainId);
+
+    // String, hex code of the chainId of the Rinkebey test network
+    return returnedChainId !== RINKEBY_CHAIN_ID ? false : true;
+  };
+
   const checkWalletConnected = async () => {
     const { ethereum } = window;
     if (!ethereum) {
       alert("Please login to Metamask!");
+    }
+
+    let ok = await confirmNetwork(ethereum, RINKEBY_CHAIN_ID);
+    if (!ok) {
+      alert("You are not connected to the Rinkeby Test Network!");
+      return;
     }
 
     const accounts = await ethereum.request({ method: "eth_accounts" });
@@ -47,13 +62,18 @@ const App = () => {
         return;
       }
 
-      // Request accounts on wallet connect
-      const accounts = await ethereum.request({
-        method: "eth_requestAccounts",
-      });
-      console.log("Connected! Account is: ", accounts[0]);
-      setCurrentUserAccount(accounts[0]);
-      setupNFTMintedListener();
+      let ok = await confirmNetwork(ethereum, RINKEBY_CHAIN_ID);
+      if (ok) {
+        // Request accounts on wallet connect
+        const accounts = await ethereum.request({
+          method: "eth_requestAccounts",
+        });
+        console.log("Connected! Account is: ", accounts[0]);
+        setCurrentUserAccount(accounts[0]);
+        setupNFTMintedListener();
+      } else {
+        alert("You are not connected to the Rinkeby Test Network!");
+      }
     } catch (e) {
       console.error(e);
     }
