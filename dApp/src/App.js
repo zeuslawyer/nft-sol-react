@@ -11,7 +11,7 @@ const TWITTER_HANDLE = "zubinpratap";
 const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
 const OPENSEA_LINK = "https://testnets.opensea.io/assets";
 const TOTAL_MINT_COUNT = 50;
-const CONTRACT_ADDRESS = "0xc58E4EBdC72c20bB956371187a47468c5bd799ff";
+const CONTRACT_ADDRESS = "0x8839FfaFbBE34A84EDe832db33A1BCC708afBa08";
 const RINKEBY_CHAIN_ID = "0x4";
 
 const App = () => {
@@ -96,11 +96,18 @@ const App = () => {
         connectedContract.on(
           "NewEpicNFTMinted",
           (sender, tokenId, maxTokens) => {
-            console.log(sender, tokenId.toNumber(), maxTokens.toNumber());
+            const openseaLink = `${OPENSEA_LINK}/${CONTRACT_ADDRESS}/${tokenId.toNumber()}`;
+            console.log(
+              sender,
+              tokenId.toNumber(),
+              maxTokens.toNumber(),
+              "--viewable at: ",
+              openseaLink
+            );
             setTotalTokensMinted(tokenId.toNumber());
             setMaxTokenSupply(maxTokens.toNumber());
             alert(
-              `Hey there! Your NFT has been minted and linked it to your wallet address. It may be blank right now. It can take a max of 10 min to show up on OpenSea. Here's the link: ${OPENSEA_LINK}/${CONTRACT_ADDRESS}/${tokenId.toNumber()}`
+              `Hey there! Your NFT has been minted and linked it to your wallet address. It may be blank right now. It can take a max of 10 min to show up on OpenSea. Here's the link: ${openseaLink}`
             );
           }
         );
