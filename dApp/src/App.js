@@ -51,7 +51,7 @@ const App = () => {
 
   React.useEffect(() => {
     checkWalletConnected();
-  }, []);
+  });
 
   const connectWallet = async () => {
     try {
