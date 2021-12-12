@@ -1,6 +1,6 @@
 # My NFT project
 
-This is a fun project only.
+This is a fun project only. Published [here](https://laughing-pike-52af82.netlify.app/).
 
 Run commands in the relevant directory, not in project root.
 
@@ -19,6 +19,10 @@ Any time the contract is changed:
 # Stack
 
 Hardhat, Solidity, JavaScript, React
+
+React frontend deployed on Netflify.
+
+Smart contract deployed on Rinkeby Network.
 
 # Compile smart contract and deploy to local Hardhat chain
 
