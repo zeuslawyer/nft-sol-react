@@ -1,6 +1,22 @@
-# My NFT project
+# Contract and NFT details
 
-This is a fun project only. Published [here](https://laughing-pike-52af82.netlify.app/).
+- This is a fun project only. dApp Front end is published [here](https://laughing-pike-52af82.netlify.app/).
+
+- The contract address on [rinkeby etherscan](https://rinkeby.etherscan.io/address/0x8839ffafbbe34a84ede832db33a1bcc708afba08) is 0x03f6d53c4b337ee4d121db358baf33df8c71108c.
+
+- Minted NFTs can be seen on [Rinkeby OpenSea](https://testnets.opensea.io/account). They are goofy legal terminology ERC721 tokens.
+
+![Goofy Legal NFTs](./opensea_screenshot.png)
+
+# Stack
+
+Hardhat, Solidity, JavaScript, [Alchemy](https://www.alchemy.com/) entrypoint to Ethereum node APIs.
+
+Smart contract deployed on Rinkeby Network.
+
+React frontend deployed on Netlify.
+
+# Notes
 
 Run commands in the relevant directory, not in project root.
 
@@ -15,14 +31,6 @@ Any time the contract is changed:
 - Update contract address in App.js.
 - Update ABI file in the frontend's `./abi` folder.
 - update the contract address constant in `App.js`
-
-# Stack
-
-Hardhat, Solidity, JavaScript, React
-
-React frontend deployed on Netflify.
-
-Smart contract deployed on Rinkeby Network.
 
 # Compile smart contract and deploy to local Hardhat chain
 
